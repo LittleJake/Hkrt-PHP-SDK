@@ -11,7 +11,6 @@
 
 class Hkrt {
     private $version = '9.9.9';
-    private $mobile = '手机号';
     //手机号用于二次验证是否为本人账号
 
     private $url = [
@@ -24,7 +23,8 @@ class Hkrt {
 
     private $config = [
         'username' => '用户名',
-        'password' => '密码'
+        'password' => '密码',
+        'mobile' => '手机号'
     ];//用户名需抓包
 
     private $header = [
@@ -60,8 +60,24 @@ class Hkrt {
         return $this -> posturl($url);
     }
 
-    public function checkOrder($token, $flowId){
+    public function checkOrder($flowId){
+        try{
+            $token = $this->login();
 
+            $query = [
+                'token' => $token,
+                'flowId' => $flowId,
+            ];
+
+            $url = $this->url['check']. '?'.http_build_query($query);
+
+            $rnt = $this-> posturl($url);
+
+            return $rnt;
+        } catch(\Exception $e){
+            var_dump($e);
+        }
+        return false;
     }
 
 
